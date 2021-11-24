@@ -174,7 +174,7 @@ fun parseBenchmarks(path: Path): List<Benchmark> = kotlin.collections.buildList<
 fun computeMetrics(
     name: String, vararg files: Path
 ) {
-    val results = files.map { parseBenchmarks(it) }
+    val results = files.mapNotNull { if (it.toFile().exists()) parseBenchmarks(it) else null }
 
     val avgs = results.map { it.map { it.linesCovRatio }.average() }
 
@@ -204,34 +204,34 @@ fun computeMetrics(
 
 
 val seed60File =
-    Paths.get("kex-tardis-results/results_evosuiteSeed_60/stats")
+    Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_60/stats")
 val seed120File =
-    Paths.get("kex-tardis-results/results_evosuiteSeed_120/stats")
+    Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_120/stats")
 val seed300File =
-    Paths.get("kex-tardis-results/results_evosuiteSeed_300/stats")
+    Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_300/stats")
 val seed600File =
-    Paths.get("kex-tardis-results/results_evosuiteSeed_600/stats")
+    Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_600/stats")
 
 computeMetrics("seed", seed60File, seed120File, seed300File, seed600File)
 
 val reanimator60File =
-    Paths.get("tardis/results_reanimator_60/stats")
+    Paths.get("reanimator-evaluation/tardis/results_reanimator_60/stats")
 val reanimator120File =
-    Paths.get("tardis/results_reanimator_120/stats")
+    Paths.get("reanimator-evaluation/tardis/results_reanimator_120/stats")
 val reanimator300File =
-    Paths.get("tardis/results_reanimator_300/stats")
+    Paths.get("reanimator-evaluation/tardis/results_reanimator_300/stats")
 val reanimator600File =
-    Paths.get("tardis/results_reanimator_600/stats")
+    Paths.get("reanimator-evaluation/tardis/results_reanimator_600/stats")
 
 computeMetrics("reanimator", reanimator60File, reanimator120File, reanimator300File, reanimator600File)
 
 val evosuite60File =
-    Paths.get("kex-tardis-results/results_evosuite_60/stats")
+    Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuite_60/stats")
 val evosuite120File =
-    Paths.get("kex-tardis-results/results_evosuite_120/stats")
+    Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuite_120/stats")
 val evosuite300File =
-    Paths.get("kex-tardis-results/results_evosuite_300/stats")
+    Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuite_300/stats")
 val evosuite600File =
-    Paths.get("kex-tardis-results/results_evosuite_600/stats")
+    Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuite_600/stats")
 
 computeMetrics("evosuite", evosuite60File, evosuite120File, evosuite300File, evosuite600File)
