@@ -172,11 +172,11 @@ fun parseBenchmarks(path: Path): List<Benchmark> = kotlin.collections.buildList<
 }.drop(1)
 
 fun computeMetrics(
-    name: String, vararg files: Path
+    name: String, vararg files: Path, metric: (Benchmark) -> Double = { it.linesCovRatio }
 ) {
     val results = files.mapNotNull { if (it.toFile().exists()) parseBenchmarks(it) else null }
 
-    val avgs = results.map { it.map { it.linesCovRatio }.average() }
+    val avgs = results.map { it.map { metric(it) }.average() }
 
     for ((i, avg) in avgs.withIndex()) {
         println("${name.kapitalize()} $i: ${String.format("%.2f", avg)}")
@@ -187,7 +187,7 @@ fun computeMetrics(
     val benchmarkMap = mutableMapOf<String, MutableList<Double>>()
     for (res in results) {
         for (b in res) {
-            benchmarkMap.getOrPut(b.benchmark, ::mutableListOf).add(b.linesCovRatio)
+            benchmarkMap.getOrPut(b.benchmark, ::mutableListOf).add(metric(b))
         }
     }
 
