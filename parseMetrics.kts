@@ -2,6 +2,9 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 
+val BENCHMARKS = Paths.get("benchmarks2022.list").toFile().readLines()
+    .filter { it.isNotBlank() }.map { it.trim() }.sorted()
+
 fun String.kapitalize() =
     this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
@@ -182,8 +185,6 @@ fun computeMetrics(
         println("${name.kapitalize()} $i: ${String.format("%.2f", avg)}")
     }
 
-    val benchmarks = Paths.get("benchmark.list").toFile().readLines()
-        .filter { it.isNotBlank() }.map { it.trim() }
     val benchmarkMap = mutableMapOf<String, MutableList<Double>>()
     for (res in results) {
         for (b in res) {
@@ -191,9 +192,9 @@ fun computeMetrics(
         }
     }
 
-	val maxBenchmarkLength = benchmarks.maxOf { it.length } + 1
+	val maxBenchmarkLength = BENCHMARKS.maxOf { it.length } + 1
 
-    for (b in benchmarks.sorted()) {
+    for (b in BENCHMARKS) {
         println(
             "$b${" ".repeat(maxBenchmarkLength - b.length)}\t${
                 benchmarkMap.getOrDefault(b, results.map { 0.0 }.toMutableList())
@@ -204,46 +205,9 @@ fun computeMetrics(
     println()
 }
 
+computeMetrics(
+    "newKex",
+    Paths.get("/home/abdullin/workspace/kex-sbst/stats.txt"),
+    Paths.get("/home/abdullin/workspace/kex-sbst/statsSeed.txt"),
+) { it.condCovRatio }
 
-//val seed60File = Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_60/stats")
-//val seed120File = Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_120/stats")
-//val seed300File = Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_300/stats")
-//val seed600File = Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_600/stats")
-//
-//computeMetrics("seed", seed60File, seed120File, seed300File, seed600File)
-//
-//val reanimator60File = Paths.get("reanimator-evaluation/tardis/results_reanimator_60/stats")
-//val reanimator120File = Paths.get("reanimator-evaluation/tardis/results_reanimator_120/stats")
-//val reanimator300File = Paths.get("reanimator-evaluation/tardis/results_reanimator_300/stats")
-//val reanimator600File = Paths.get("reanimator-evaluation/tardis/results_reanimator_600/stats")
-//
-//computeMetrics("reanimator", reanimator60File, reanimator120File, reanimator300File, reanimator600File)
-
-//val evosuite60File = Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuite_60/stats")
-//val evosuite120File = Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuite_120/stats")
-//val evosuite300File = Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuite_300/stats")
-//val evosuite600File = Paths.get("reanimator-evaluation/kex-tardis-results/results_evosuite_600/stats")
-//
-//computeMetrics("evosuite", evosuite60File, evosuite120File, evosuite300File, evosuite600File)
-
-//
-//val kex60File = Paths.get("/home/abdullin/workspace/sbst-stats-parser/reanimator-evaluation/kex-results/results_kex_60/stats")
-val kex30New2 = Paths.get("/home/abdullin/workspace/kex-sbst/results_kexNew_30/stats")
-val kex30NoReanNew = Paths.get("/home/abdullin/workspace/kex-sbst/results_kexNoReanimator_30/stats")
-val kex30NoRtNew = Paths.get("/home/abdullin/workspace/kex-sbst/results_kexNoRt_30/stats")
-val kex30New = Paths.get("/home/abdullin/workspace/kex-sbst/results_kex_30/stats")
-val kex60New = Paths.get("/home/abdullin/workspace/kex-sbst/results_kex_60/stats")
-val kex120New = Paths.get("/home/abdullin/workspace/kex-sbst/results_kex_120/stats")
-val kex300New = Paths.get("/home/abdullin/workspace/sbst-stats-parser/reanimator-evaluation/kex/results_kex_300/stats")
-val kex600New = Paths.get("/home/abdullin/workspace/sbst-stats-parser/reanimator-evaluation/kex/results_kex_600/stats")
-computeMetrics("kex", kex30NoReanNew, kex30NoRtNew, kex30New2, kex30New, kex60New, kex120New, kex300New, kex600New)
-
-//val seed = Paths.get("/home/abdullin/workspace/sbst-stats-parser/reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_60/stats")
-//val reanimator60File = Paths.get("/home/abdullin/workspace/sbst-stats-parser/reanimator-evaluation/tardis-copy/results_reanimatorConstSeed_60/stats")
-//val evosuite60File = Paths.get("/home/abdullin/workspace/sbst-stats-parser/reanimator-evaluation/tardis/results_evosuiteConst_60/stats")
-//computeMetrics("const seed", seed, reanimator60File, evosuite60File)
-
-//val seed12 = Paths.get("/home/abdullin/workspace/sbst-stats-parser/reanimator-evaluation/kex-tardis-results/results_evosuiteSeed_120/stats")
-//val reanimator12File = Paths.get("/home/abdullin/workspace/sbst-stats-parser/reanimator-evaluation/tardis-copy/results_reanimatorConstSeed_120/stats")
-//val evosuite12File = Paths.get("/home/abdullin/workspace/sbst-stats-parser/reanimator-evaluation/tardis/results_evosuiteConst_120/stats")
-//computeMetrics("const seed 120", seed12, reanimator12File, evosuite12File)
